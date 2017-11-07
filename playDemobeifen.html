@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <meta HTTP-EQUIV="Cache-Control" content="no-cache,must-revalidate">
+    <meta HTTP-EQUIV="expires" CONTENT="0">
+    <title>Title</title>
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: url("img/06.jpg") no-repeat;
+        }
+
+        #screen {
+            height: 100%;
+            width: 60%;
+            position: relative;
+            background-color: #000000;
+            overflow: hidden;
+            margin: 0 auto;
+            background-image: url("img/66.jpg");
+            background-size: cover;
+        }
+
+        #feiji {
+            height: 46px;
+            width: 56px;
+            position: absolute;
+            left: 45%;
+            bottom: 10px;
+            background: url("img/12.png") 0px 0px no-repeat;
+            background-size: 54px 45px;
+        }
+
+        .boom {
+            height: 35px;
+            width: 20px;
+            position: absolute;
+            background: url("img/11.gif") no-repeat -5px -4px;
+            background-size: 30px 40px;
+        }
+
+        .bigBoom {
+            height: 80px;
+            width: 40px;
+            position: absolute;
+            background: url("img/b221.gif") no-repeat;
+            background-size: cover;
+            top: -80px;
+        }
+
+
+    </style>
+</head>
+<body>
+<div id="screen">
+    <div id="feiji">
+        <div id="chibang"></div>
+    </div>
+</div>
+<div class="feijiPP">
+</div>
+
+<script>
+    //    window.onload()
+    var rain = (function () {
+        var _rain = function () {
+            this.init();
+        }
+        _rain.prototype = (function () {
+            var speed = 0;
+            var obj = [];
+            var n = 0;
+            var m = {x: 0, y: 0};
+            var flagForRain = 0;
+            var boom = [];
+            var flag = 0; //键盘事件unicode码值
+            var boomZD = []; //存放子弹
+            var feiXY = [{x: 0, y: 0}]; //飞机坐标
+            var key = [];//存储按键信息
+            var zdBIUBIU = null;
+            var $ = function (id) {
+                return document.getElementById(id);
+            };
+            var fei = $('feiji');
+            var height = $('screen').clientHeight;
+            var width = $('screen').clientWidth;
+
+            var createRain = function () {
+                var elem = document.createElement('span');
+                this.elem = elem;
+                this.css = elem.style;
+                this.css.position = 'absolute';
+                elem.className = 'boom';
+                this.speedY = 0;
+                this.speedX = 0;
+                $('screen').appendChild(elem);
+            }
+
+            var createBigBoom = function () {
+                var elem = document.createElement('span');
+                this.css = elem.style;
+                this.elem = elem;
+                elem.className = 'bigBoom';
+                this.speedY = 0;
+//                this.speedX = 0;
+                this.t = 0;
+                this.speed = 80;
+                var random = Math.round(Math.random() * 1);
+                var randomLeft = Math.round(Math.random() * (width - elem.clientWidth));
+                this.css.left = randomLeft + 'px';
+                if (random === 0) {
+                    this.speedX = -3;
+                } else {
+                    this.speedX = 3;
+                }
+                $('screen').appendChild(elem);
+            }
+
+            //定义子弹方法
+            var createYH = function () {
+                var elem = document.createElement('span');
+                this.css = elem.style;
+                this.css.position = 'absolute';
+                this.elem = elem;
+                this.speedY = 5;
+                this.speedX = 5;
+                this.css.height = '8px';
+                this.css.width = '3px';
+                this.css.borderRadius = '50%';
+                this.css.backgroundColor = 'white';
+                $('screen').appendChild(elem);
+            }
+
+            var createRadio = function () {
+                var elem = document.createElement('audio');
+                elem.src = 'radio/4013.wav';
+                this.elem = elem;
+                elem.autoplay = 'true';
+                $('screen').appendChild(elem);
+            }
+
+            var createZDRadio = function () {
+                var elem = document.createElement('audio');
+                elem.src = 'radio/6692.wav';
+                this.elem = elem;
+                elem.autoplay = 'true';
+                elem.loop = 'true';
+                $('screen').appendChild(elem);
+            }
+
+            //创建子弹消灭敌方
+            var Boom = function () {
+                var elem1 = new createYH();
+                var elem2 = new createYH();
+                boomZD.push(elem1);
+                boomZD.push(elem2);
+                elem1.css.left = (feiXY[0].x - 15) + 'px';
+                elem2.css.left = (feiXY[0].x + 12) + 'px';
+                elem1.css.top = feiXY[0].y + 'px';
+                elem2.css.top = feiXY[0].y + 'px';
+            }
+
+            createYH.prototype.boomFlash = function (j) {
+                var top = this.elem.offsetTop - this.speedY
+                var x = this.elem.offsetLeft + this.elem.clientWidth / 2;
+                var y = this.elem.offsetTop + this.elem.clientHeight / 2;
+
+                for (var index in obj) {
+                    var x1 = obj[index].elem.offsetLeft + obj[index].elem.clientWidth / 2;
+                    var y1 = obj[index].elem.offsetTop + obj[index].elem.clientHeight / 2;
+                    if (Math.sqrt(Math.pow(x - x1, 2) + Math.pow(y - y1, 2)) <= 15) {
+                        $('screen').removeChild(this.elem);
+                        $('screen').removeChild(obj[index].elem);
+                        boomZD.splice(j, 1);
+                        obj.splice(index, 1);
+                    }
+                }
+                //子弹越界移除
+                if (top <= 10 && boomZD.indexOf(this) != -1) {
+                    $('screen').removeChild(this.elem);
+                    boomZD.splice(j, 1);
+                }
+                this.css.top = top + 'px';
+//                this.speedY += 5;
+            }
+
+            createRain.prototype.move = function (speed1) {
+//                speed1 += 0.05;
+                this.css.top = (this.speedY += speed1) + 'px';
+                if (parseInt(this.css.top) >= height + 20) {
+                    var left = this.elem.offsetLeft;
+                    $('screen').removeChild(this.elem);
+                    var index = obj.indexOf(this);
+                    obj.splice(index, 1);
+                }
+            }
+
+            var clearBoom = function () {
+                var now;
+                var jg;
+                setTimeout(function () {
+                    for (var i = 0, len = boom.length; i < len; i++) {
+                        now = new Date();
+                        jg = now.getTime() - boom[i].startTime.getTime();
+                        if (jg >= 3000) {
+                            $('screen').removedNodes(boom[i]);
+                            boom.splice(i, 1);
+                        }
+                    }
+                }, 3000);
+            }
+
+            var flagRain = function (count, left) {
+                var dotCount = Math.round(Math.random() * count);
+                for (var i = 0; i < dotCount; i++) {
+                    left = Math.random() * left;
+                    var elem = new createRain();
+                    elem.css.left = left + 'px';
+                    obj.push(elem);
+                }
+            }
+
+            var flagCreate
+            //开始敌方导弹
+            var start = function () {
+                var startTime = new Date();
+                var endTime;
+                var timeC;
+                var count = 1;
+                setInterval(function () {
+                    endTime = new Date();
+                    timeC = endTime.getTime() - startTime.getTime();
+                    if (parseInt(timeC / 1000) > 60) {
+                        count = 6;
+                    } else if (parseInt(timeC / 1000) > 30) {
+                        count = 4;
+                    } else if (parseInt(timeC / 1000) > 10) {
+                        count = 2;
+                    }
+                    flagRain(count, parseInt($('screen').clientWidth));
+                }, 100)
+            }
+
+            //游戏结束爆炸
+            var gameoverBoom = function (left, top) {
+                var elem = document.createElement('div');
+                var img = document.createElement('img');
+                elem.appendChild(img);
+                elem.style.height = '200px';
+                elem.style.width = '200px';
+                elem.style.position = 'absolute';
+                elem.style.left = left - 80 + 'px';
+                elem.style.top = top - 80 + 'px';
+                img.style.height = '200px';
+                img.style.width = '200px';
+                img.src = 'img/bom.gif';
+                elem.style.zIndex = '100';
+                $('screen').appendChild(elem);
+            }
+
+            //判断是否撞击爆炸
+            var flagZJ = true;
+            var flagBigBoom = true;
+            var distanceOfFei = function (x1, y1, feiX, feiY, speed1) {
+                for (var index in obj) {
+                    if (obj[index]) {
+                        obj[index].move(speed1);
+                    }
+                    if (obj.indexOf(obj[index]) != -1) {
+                        var x = obj[index].elem.offsetLeft + obj[index].elem.clientWidth / 2;
+                        var y = obj[index].elem.offsetTop + obj[index].elem.clientHeight / 2;
+                    }
+                    if (Math.sqrt(Math.pow(x - x1, 2) + Math.pow(y - y1, 2)) <= 15) {
+                        if (flagZJ) { //判断是否触碰爆炸，触碰则不进行第二次
+                            $('screen').removeChild(fei)
+                            if (zdBIUBIU != null) {
+                                $('screen').removeChild(zdBIUBIU.elem);
+                            }
+                            var boom = new gameoverBoom(feiX, feiY);
+                            var audie = new createRadio();
+                            flagZJ = false;
+                        }
+                    }
+                }
+                //大导弹碰触事件
+                for (var indexBig in bigBoom) {
+                    if (bigBoom.indexOf(bigBoom[indexBig]) != -1) {
+                        var bigX = bigBoom[indexBig].elem.offsetLeft + bigBoom[indexBig].elem.clientWidth / 2;
+                        var bigY = bigBoom[indexBig].elem.offsetTop + bigBoom[indexBig].elem.clientHeight / 2;
+                    }
+                    if (Math.sqrt(Math.pow(bigX - x1, 2) + Math.pow(bigY - y1, 2)) <= 25) {
+                        if (flagBigBoom) {
+                            $('screen').removeChild(fei);
+                            $('screen').removeChild(bigBoom[indexBig].elem);
+                            bigBoom.splice(indexBig,1);
+                            if (zdBIUBIU != null) { //移除子弹声音
+                                $('screen').removeChild(zdBIUBIU.elem);
+                            }
+                            var boom = new gameoverBoom(feiX, feiY);
+                            var audie = new createRadio();
+//                            $('screen').removeChild();
+                            flagBigBoom = false;
+                        }
+                    }
+                }
+            }
+            var bigBoom = [];
+            var bigBoomCreateTime = 3000;
+
+            //移动炸弹工厂
+            var boomMove = function (i) {
+                this.speedY += 4.5
+                this.css.top = this.speedY + 'px';
+                if (this.elem.offsetLeft + this.elem.clientWidth >= $('screen').clientWidth) {
+                    this.speedX = -1 * this.speedX;
+                } else if (this.elem.offsetLeft <= 0) {
+                    this.speedX = -1 * this.speedX;
+                }
+                this.css.left = this.elem.offsetLeft + this.speedX + 'px';
+                if (this.elem.offsetTop > $('screen').clientHeight) {
+                    $('screen').removeChild(this.elem);
+                    if (bigBoom.indexOf(this) > -1) {
+                        bigBoom.splice(i, 1);
+                    }
+                }
+            }
+
+            //产生大导弹
+            var boomCreateElem = function () {
+                setInterval(function () {
+                    var elem = new createBigBoom();
+                    bigBoom.push(elem);
+                    bigBoomCreateTime -= 100;
+                }, bigBoomCreateTime)
+            }
+
+            //呼叫子弹移动事件
+            var boomMoveStart = function () {
+                for (var i = 0; i < bigBoom.length; i++) {
+                    boomMove.call(bigBoom[i], i);
+                }
+            }
+
+            //飞机移动
+            var feiji1 = function () {
+                var flagSpeed = 5;
+                var left;
+                var top;
+                var timer;
+                var speed = 0;
+                document.onkeydown = function (eve) {
+                    var eve = eve || window.event;
+                    flag = eve.keyCode;
+                }
+
+                document.onkeyup = function () {
+                    flag = 0;
+                };
+
+                (function () {
+                    var speed1 = 4;
+                    timer = setInterval(function () {
+//                        console.log(flag)
+                        speed1 += 0.005;
+
+                        //子弹移动
+                        for (var j = 0; j < boomZD.length; j++) {
+                            boomZD[j].boomFlash(j);
+                        }
+
+                        //处理飞机移动事件
+                        left = fei.offsetLeft;
+                        top = fei.offsetTop;
+                        feiXY[0].x = left + fei.clientWidth / 2;
+                        feiXY[0].y = top;
+                        distanceOfFei(left + fei.clientWidth / 2, top + fei.clientHeight / 2, left, top, speed1);
+                        switch (flag) {
+                            case 0:
+                                speed = 0;
+                                break;
+                            case 37:
+                                if (left <= 0) {
+                                    speed = 0;
+                                } else {
+                                    speed = flagSpeed;
+                                }
+                                fei.style.left = left - speed + 'px';
+                                break;
+                            case 39:
+                                if (left + fei.clientWidth >= $('screen').clientWidth) {
+                                    speed = 0;
+                                } else {
+                                    speed = flagSpeed;
+                                }
+                                fei.style.left = left + speed + 'px';
+                                break;
+                            case 38:
+                                if (top <= 0) {
+                                    speed = 0;
+                                } else {
+                                    speed = flagSpeed;
+                                }
+                                fei.style.top = top - speed + 'px';
+                                break;
+                            case 40:
+                                if (top + fei.clientHeight >= $('screen').clientHeight) {
+                                    speed = 0;
+                                } else {
+                                    speed = flagSpeed;
+                                }
+                                fei.style.top = top + speed + 'px';
+                                break;
+                        }
+                        //大导弹移动事件
+                        boomMoveStart();
+                        console.log(bigBoom.length)
+                    }, 16);
+                })();
+            }
+
+            var startBoom = function () {
+                setInterval(function () {
+                    Boom();
+                }, 200);
+            };
+
+            return {
+                init: function () {
+                    start();
+                    startBoom()
+                    feiji1();
+                    zdBIUBIU = new createZDRadio();
+                    boomMoveStart();
+                    boomCreateElem();
+                }
+            }
+        })();
+        return _rain;
+    })();
+    var rain = new rain();
+</script>
+<script>
+    //    var rr = rain;
+    //    console.log(rr);
+</script>
+</body>
+</html>

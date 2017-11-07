@@ -1,0 +1,63 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: url("../img/06.jpg") no-repeat;
+}
+
+#screen {
+    height: 100%;
+    width: 60%;
+    position: relative;
+    background-color: #000000;
+    overflow: hidden;
+    margin: 0 auto;
+    background-image: url("../img/66.jpg");
+    background-size: cover;
+    box-shadow: -3px 0px 3px #8AA8B3, 3px 0px 3px #8AA8B3;
+}
+
+#nameICON {
+    display: block;
+    position: absolute;
+    top: 110px;
+    height: 30%;
+    width: 100%;
+}
+
+#start {
+    display: block;
+    height: 50px;
+    width: 150px;
+    margin:0px auto;
+    margin-top: 430px;
+    font-size: 30px;
+    text-decoration: none;
+    color: brown;
+    border: 2px solid brown;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 50px;
+    transition: 0.2s;
+}
+#airplane {
+    display: block;
+    height: 50px;
+    width: 150px;
+    margin: 10px auto;
+    font-size: 30px;
+    text-decoration: none;
+    color: brown;
+    border: 2px solid brown;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 50px;
+    transition: 0.2s;
+}
+
+#start:hover,#airplane:hover {
+    text-shadow: -2px -2px 2px white, 2px 2px 2px black;
+    font-size: 33px;
+}

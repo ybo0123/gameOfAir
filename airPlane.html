@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/gameSetting.css">
+    <link href="css/aripb.css" rel="stylesheet">
+    <script src="js/forCookie.js"></script>
+    <script src="js/gameSetting.js"></script>
+    <!--<script src="js/airplane.js"></script>-->
+    <style>
+        .settingLeft {
+            height: 100%;
+            width: 20%;
+            border: 1px solid #993300;
+            position: absolute;
+        }
+
+        .settingLeft #ariPlaneUse {
+            width: 90%;
+            height: 37%;
+            border: 1px solid #993300;
+            border-radius: 10px;
+            margin: 20px 12px;
+        }
+        .settingLeft #ariBoomUse {
+            width: 90%;
+            height: 37%;
+            border: 1px solid #993300;
+            border-radius: 10px;
+            margin: 25px 12px;
+        }
+        #rightButton {
+            position: absolute;
+            height: 50px;
+            width: 15%;
+            border: 2px solid #993300;
+            border-radius: 10px;
+            margin-top: 50px;
+            right: 2%;
+            top: 30px;
+            color: #993300;
+            font-size: 200%;
+            text-align: center;
+            line-height: 50px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="settingLeft">
+        <div id="ariPlaneUse"></div>
+        <div id="ariBoomUse"></div>
+    </div>
+    <div id="screen">
+        <div class="common plane">
+            <h2>机型选择</h2>
+            <div class="commonBox" id="planeBox">
+                <div class="prev commonPNP" id="prevFJ">&lt;</div>
+                <div class="next commonPNN" id="nextFJ">&gt;</div>
+                <div id="planeBoxInner"></div>
+                <div class="forFeiTest"></div>
+            </div>
+        </div>
+        <div class="common weapen">
+            <h2>武器选择</h2>
+            <div class="commonBox" id="weapenBox">
+                <div class="prev commonPNP" id="prevDD">&lt;</div>
+                <div class="next commonPNN" id="nextDD">&gt;</div>
+                <div id="boomBoxInner"></div>
+            </div>
+        </div>
+    </div>
+    <a id="rightButton" href="index.html">返回</a>
+</body>
+</html>

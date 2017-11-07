@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stulist>
+    <stu>
+        <name>张三</name>
+        <age>20</age>
+        <sex>男</sex>
+        <classid>lamp87</classid>
+    </stu>
+    <stu>
+        <name>李四</name>
+        <age>22</age>
+        <sex>女</sex>
+        <classid>lamp86</classid>
+    </stu>
+    <stu>
+        <name>王五</name>
+        <age>21</age>
+        <sex>女</sex>
+        <classid>lamp87</classid>
+    </stu>
+    <stu>
+        <name>王五</name>
+        <age>21</age>
+        <sex>女</sex>
+        <classid>lamp87</classid>
+    </stu>
+    <stu>
+        <name>赵六</name>
+        <age>24</age>
+        <sex>男</sex>
+        <classid>lamp88</classid>
+    </stu>
+</stulist>

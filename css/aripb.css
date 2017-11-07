@@ -1,0 +1,57 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: url("../img/06.jpg") no-repeat;
+}
+
+#screen {
+    height: 100%;
+    width: 60%;
+    position: relative;
+    background-color: #000000;
+    overflow: hidden;
+    margin: 0 auto;
+    background-image: url("../img/66.jpg");
+    background-size: cover;
+    box-shadow: -3px 0px 3px #8AA8B3, 3px 0px 3px #8AA8B3;
+}
+
+#feiji {
+    height: 46px;
+    width: 56px;
+    position: absolute;
+    left: 45%;
+    bottom: 10px;
+    background: url("../img/12.png") 0px 0px no-repeat;
+    background-size: 54px 45px;
+}
+
+.boom {
+    height: 35px;
+    width: 20px;
+    position: absolute;
+    background: url("../img/11.gif") no-repeat -5px -4px;
+    background-size: 30px 40px;
+}
+
+.bigBoom {
+    height: 80px;
+    width: 40px;
+    position: absolute;
+    background: url("../img/b221.gif") no-repeat;
+    background-size: cover;
+    top: -80px;
+}
+/*子弹*/
+.createYH {
+    height: 15px;
+    width: 10px;
+    border-radius: 50%;
+    background: url("../img/zidan.gif") no-repeat;
+    background-size: 3px 8px;
+    /*background-color: white;*/
+}
+
